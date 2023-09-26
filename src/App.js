@@ -4,6 +4,8 @@ import Login from './Login';
 import CreateAccount from './CreateAccount';
 import Home from './Home';
 import Navbar from './Navbar';
+import Dashboard from './Dashboard';  
+import UserSettings from './UserSettings';
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/dashboard" element={<Dashboard />} /> 
+        <Route path="/user-settings" element={<UserSettings />} />
       </Routes>
     </Router>
   );

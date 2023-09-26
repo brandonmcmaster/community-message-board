@@ -22,5 +22,4 @@ const auth = getAuth();
 
 const googleProvider = new GoogleAuthProvider();
 
-export { auth }; // Export it so you can use it in other components
-export { googleProvider };
+export { auth, googleProvider, createUserWithEmailAndPassword }; // Export it so you can use it in other components
