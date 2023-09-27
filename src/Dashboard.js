@@ -1,33 +1,70 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db, auth } from "./firebase";  // Import your Firestore and auth objects here
 
 const Dashboard = () => {
+  const [username, setUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [newAvatarUrl, setNewAvatarUrl] = useState("");
+  const user = auth.currentUser;
+
+  const getUserProfile = async () => {
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setUsername(data.username);
+      setAvatarUrl(data.avatarUrl);
+    } else {
+      // Handle case where there is no existing profile for this user
+      // This could involve setting default values or prompting the user to complete their profile
+    }
+  };
+
+  const updateUserProfile = async () => {
+    const docRef = doc(db, "users", user.uid);
+
+    await setDoc(docRef, {
+      username: newUsername,
+      avatarUrl: newAvatarUrl
+    });
+    
+    // Update local state to reflect changes
+    setUsername(newUsername);
+    setAvatarUrl(newAvatarUrl);
+  };
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);  // Empty dependency array means this effect runs once when the component mounts
+
   return (
-    <div className="bg-black text-white p-4">
-      <h1 className="text-3xl font-semibold mb-4">Dashboard</h1>
-
-      {/* User Information */}
-      <div className="flex items-center mb-4">
-        <img src="https://via.placeholder.com/50" alt="User Avatar" className="h-16 w-16 rounded-full mr-4"/>
-        <div>
-          <h2 className="text-xl font-medium">Username</h2>
-          <p>Email</p>
-        </div>
+    <div>
+      <h1>Dashboard</h1>
+      <div>
+        <img src={avatarUrl} alt="User avatar" width="100" height="100" />
+        <p>Username: {username}</p>
       </div>
-
-      {/* User Posts */}
-      <div className="mb-4">
-        <h2 className="text-2xl font-medium mb-2">Your Posts</h2>
-        {/* Placeholder for posts */}
-        <div className="bg-gray-700 p-4 rounded">
-          Placeholder for posts
-        </div>
+      <div>
+        <input 
+          type="text" 
+          placeholder="New username" 
+          value={newUsername}
+          onChange={(e) => setNewUsername(e.target.value)} 
+        />
+        <button onClick={updateUserProfile}>Update Username</button>
       </div>
-
-      {/* User Settings Button */}
-      <Link to="/user-settings" className="bg-red-600 text-white p-2 rounded">
-        Go to Settings
-      </Link>
+      <div>
+        <input 
+          type="text" 
+          placeholder="New avatar URL" 
+          value={newAvatarUrl}
+          onChange={(e) => setNewAvatarUrl(e.target.value)} 
+        />
+        <button onClick={updateUserProfile}>Update Avatar</button>
+      </div>
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, googleProvider } from './firebase';
+import { addUserToFirestore } from './firestoreUtils';  // Make sure the path is correct
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,26 +11,29 @@ const Login = () => {
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
-  const handleGoogleLogin = () => {
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        console.log("User signed in:", result.user);
-        navigate('/'); // Navigate to homepage
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-      });
+ const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      console.log("User signed in:", user);
+      await addUserToFirestore(user);  // Add user to Firestore
+      navigate('/dashboard');
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((result) => {
-        console.log("User logged in:", result.user);
-        navigate('/'); // Navigate to homepage
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-      });
+  
+  const handleEmailLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log("User signed in:", user);
+      await addUserToFirestore(user);  // Add user to Firestore
+      navigate('/dashboard');
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   return (
@@ -72,7 +77,7 @@ const Login = () => {
               className="border p-2 rounded w-full mt-4 bg-gray-800 text-white"
             />
             <button 
-              onClick={handleLogin} 
+              onClick={handleEmailLogin} 
               className="bg-red-600 text-white p-2 rounded w-full mt-4"
             >
               Login
