@@ -27,6 +27,10 @@ const Dashboard = () => {
 
   const handleAvatarUpload = (e) => {
     const file = e.target.files[0];
+    if (!file) {
+      console.error("No file selected for upload.");
+      return;
+    }
     const storageRef = ref(storage, `avatars/${user.uid}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
   
@@ -69,6 +73,7 @@ const Dashboard = () => {
 
   const handleUpdateDisplayName = async () => {
     const user = auth.currentUser;
+    console.log("Current user object:", user);
     if (user) {
       try {
         await updateProfile(user,{
@@ -91,7 +96,13 @@ const Dashboard = () => {
   };
 
   const handleUpdatePhotoURL = async () => {
+    if (!newPhotoURL) {
+      alert("Please upload an avatar before confirming.");
+      return;
+    }
+  
     const user = auth.currentUser;
+    console.log("Current user object:", user);
     if (user) {
       try {
         await updateProfile(user, {
@@ -114,33 +125,52 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-4 rounded">
-  <h3 className="text-xl font-semibold mb-2">Update Profile</h3>
-  
-  <label htmlFor="avatarUpload" className="cursor-pointer mb-2 inline-block">
-    <span className="bg-gray-600 text-white py-1 px-3 rounded">Upload New Avatar</span>
-  </label>
-  <input
-    type="file"
-    id="avatarUpload"
-    className="hidden"
-    onChange={handleAvatarUpload}
-  />
+    <div className="bg-black text-white p-6">
+      <div className="flex flex-col items-center">
+        <img 
+          src={photoURL || 'default-avatar.jpg'} 
+          alt="User Avatar" 
+          className="rounded-full w-32 h-32 object-cover mb-4" 
+        />
+        <h2 className="text-2xl font-semibold mb-4">{displayName || 'Anonymous User'}</h2>
+      </div>
+      <div className="border border-gray-700 p-6 rounded">
+        <h3 className="text-xl font-semibold mb-4">Update Profile</h3>
+        
+        {/* Update Display Name */}
+        <div className="mb-4">
+          <label className="block mb-2">New Display Name</label>
+          <input 
+            type="text" 
+            className="bg-gray-800 text-white p-2 rounded w-full"
+            value={newDisplayName} 
+            onChange={(e) => setNewDisplayName(e.target.value)} 
+          />
+          <button 
+            className="mt-2 bg-gray-700 text-white p-2 rounded w-full" 
+            onClick={handleUpdateDisplayName}
+          >
+            Update Display Name
+          </button>
+        </div>
 
-  <input
-    type="text"
-    className="bg-white text-black p-2 rounded shadow-sm"
-    value={newDisplayName}
-    onChange={(e) => setNewDisplayName(e.target.value)}
-    placeholder="New Display Name"
-  />
-  <button onClick={handleUpdateDisplayName} className="bg-blue-500 text-white p-2 rounded">Update Display Name</button>
-
-  <div className="mt-4">
-    <button onClick={handleUpdatePhotoURL} className="bg-green-500 text-white p-2 rounded">Confirm Avatar</button>
-  </div>
-</div>
-
+        {/* Update Avatar */}
+        <div className="mb-4">
+          <label className="block mb-2">New Avatar</label>
+          <input 
+            type="file" 
+            className="bg-gray-800 text-white p-2 rounded w-full"
+            onChange={handleAvatarUpload} 
+          />
+          <button 
+            className="mt-2 bg-gray-700 text-white p-2 rounded w-full" 
+            onClick={handleUpdatePhotoURL}
+          >
+            Confirm Avatar
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
