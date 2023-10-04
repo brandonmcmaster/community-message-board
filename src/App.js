@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import { auth } from './firebase';
 import Footer from './Footer';
 import './App.css'; 
+import Header from './Header';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -24,6 +25,7 @@ function App() {
 
   return (
     <Router>
+      <Header />
         <div className="flex flex-col min-h-screen">
       <Navbar user={user} />
       <div className="flex-grow">
