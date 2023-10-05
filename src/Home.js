@@ -29,7 +29,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-black text-white h-screen p-6">
+    <div className="bg-black text-white min-h-screen p-6">
     <h1 className="text-4xl font-bold mb-4">Community Message Board</h1>
     <div className="bg-gray-800 p-4 rounded">
       <h2 className="text-3xl font-bold mb-4">Featured Content</h2>
