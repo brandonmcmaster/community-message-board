@@ -1,4 +1,4 @@
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"; 
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection } from "firebase/firestore"; 
 import { auth } from './firebase';
 
 // Initialize Firestore
@@ -19,4 +19,19 @@ export const addUserToFirestore = async (uid, displayName, photoURL) => {
   }
 };
 
-// You can add more Firestore utility functions here
+export const setUserOnline = async (userId, username) => {
+  const userRef = doc(db, 'online_users', userId);
+  await setDoc(userRef, {
+    last_active: new Date().toISOString(),
+    username,
+  });
+};
+
+export const listenToOnlineUsers = (updateUIFunction) => {
+  const onlineUsersCollection = collection(db, 'online_users');
+  return onSnapshot(onlineUsersCollection, (snapshot) => {
+    const onlineCount = snapshot.size;
+    updateUIFunction(onlineCount);
+  });
+  
+};
