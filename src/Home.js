@@ -35,14 +35,15 @@ const Home = () => {
       <h2 className="text-3xl font-bold mb-4">Featured Content</h2>
       {/* Placeholder for featured content like flyers and videos */}
       <div className="bg-gray-700 p-4 rounded">
-        <img src="/path/to/flyer.jpg" alt="Flyer for show" className="w-full h-auto rounded mb-4"/>
+        <img src="https://thugbrarianreview.files.wordpress.com/2014/07/blackflag.jpg" alt="Flyer for show" className="w-full h-auto rounded mb-4"/>
         <iframe 
-          title="New Music Video" 
-          src="https://www.youtube.com/embed/sample_video_id" 
-          width="100%" 
-          height="315" 
-          frameBorder="0" 
-          allowFullScreen>
+        width="560" 
+        height="315" 
+        src="https://www.youtube.com/embed/qHeh6RofFdU?si=7wqsxoVn_h0uSPYO" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen>
         </iframe>
       </div>
       

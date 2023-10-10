@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getAuth } from 'firebase/auth'; // Import the getAuth function
 import { db } from './firebase';  // Adjust the import to match your file structure
 import { collection, addDoc } from 'firebase/firestore';
 
@@ -8,16 +9,27 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await addDoc(collection(db, 'posts'), {
-        title: title,
-        content: content,
-      });
-      setTitle('');
-      setContent('');
-      alert('Post created successfully');
-    } catch (e) {
-      alert('Error creating post: ', e);
+
+    // Get current user ID from Firebase Authentication
+    const auth = getAuth();
+    const userId = auth.currentUser ? auth.currentUser.uid : null;
+
+    // Only proceed if userId exists
+    if (userId) {
+      try {
+        await addDoc(collection(db, 'posts'), {
+          title: title,
+          content: content,
+          userId: userId  // Include userId here
+        });
+        setTitle('');
+        setContent('');
+        alert('Post created successfully');
+      } catch (e) {
+        alert('Error creating post: ', e);
+      }
+    } else {
+      alert('Please log in to create a post');
     }
   };
 
