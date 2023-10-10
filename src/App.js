@@ -11,6 +11,8 @@ import { auth } from './firebase';
 import Footer from './Footer';
 import './App.css'; 
 import Header from './Header';
+import MessageBoardLanding from './MessageBoardLanding'; // Adjust the path as needed
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -35,7 +37,8 @@ function App() {
         <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/settings" element={user ? <UserSettings /> : <Navigate to="/login" />} /> {/* Added UserSettings */}
+        <Route path="/settings" element={user ? <UserSettings /> : <Navigate to="/login" />} />
+        <Route path="/message-board" element={<MessageBoardLanding />} /> {/* Add this route */}
       </Routes>
       </div>
       <Footer />

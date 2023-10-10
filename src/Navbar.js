@@ -4,6 +4,10 @@ import { auth, signOut } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getFirestore, query, collection, getDocs } from "firebase/firestore";
 
+
+
+
+
 const Navbar = () => {
   const [user] = useAuthState(auth);
   const history = useNavigate();
