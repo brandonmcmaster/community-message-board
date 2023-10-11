@@ -1,4 +1,4 @@
-import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection } from "firebase/firestore"; 
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, addDoc } from "firebase/firestore"; 
 import { auth } from './firebase';
 
 // Initialize Firestore
@@ -10,13 +10,51 @@ export const addUserToFirestore = async (uid, displayName, photoURL) => {
 
   if (!userSnap.exists()) {
     const data = {
-      displayName: displayName,
-      photoURL: photoURL,
-      // Add any more user data here
+      displayName,
+      photoURL,
+      role: 'user',
+      isPremium: false,
     };
-
     await setDoc(userRef, data);
   }
+};
+
+export const createThread = async (title, description, section, isPrivate = false) => {
+  const threadRef = doc(collection(db, 'threads'));
+  const userId = auth.currentUser ? auth.currentUser.uid : null;
+  const threadData = {
+    title,
+    description,
+    section,
+    createdBy: userId,
+    isPrivate,
+  };
+  await setDoc(threadRef, threadData);
+};
+
+export const createPost = async (threadId, content) => {
+  const postRef = doc(collection(db, 'posts'));
+  const userId = auth.currentUser ? auth.currentUser.uid : null;
+  const postData = {
+    threadId,
+    content,
+    postedBy: userId,
+  };
+  await setDoc(postRef, postData);
+};
+
+export const createNewThread = async (title, description, sectionId, userId) => {
+  const threadRef = collection(db, 'threads');
+  const newThread = {
+    title,
+    description,
+    sectionId,
+    userId,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    isPremium: false,
+  };
+  await addDoc(threadRef, newThread);
 };
 
 export const setUserOnline = async (userId, username) => {
@@ -33,5 +71,4 @@ export const listenToOnlineUsers = (updateUIFunction) => {
     const onlineCount = snapshot.size;
     updateUIFunction(onlineCount);
   });
-  
 };
