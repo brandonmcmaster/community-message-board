@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { auth, createUserWithEmailAndPassword } from './firebase';
+import { auth, createUserWithEmailAndPassword } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 
 const CreateAccount = () => {

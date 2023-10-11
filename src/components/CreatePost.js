@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth'; // Import the getAuth function
-import { db } from './firebase';  // Adjust the import to match your file structure
+import { db } from '../firebase';  // Adjust the import to match your file structure
 import { collection, addDoc } from 'firebase/firestore';
 
 const CreatePost = () => {

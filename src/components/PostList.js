@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { db } from './firebase';  // Adjust the import to match your file structure
+import { db } from '../firebase';  // Adjust the import to match your file structure
 import { collection, onSnapshot } from 'firebase/firestore';
-import UserLink from './UserLink';  // Import UserLink
+import UserLink from '../UserLink';  // Import UserLink
 import { doc, deleteDoc } from 'firebase/firestore';
 
 const PostList = () => {

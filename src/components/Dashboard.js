@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
-import { db, auth } from "./firebase";
+import { db, auth } from "../firebase";
 import { updateProfile } from "firebase/auth"; 
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from './firebase';
+import { storage } from '../firebase';
 
 const Dashboard = () => {
   const [displayName, setDisplayName] = useState("");
