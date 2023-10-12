@@ -17,6 +17,7 @@ import Footer from "./components/Footer";
 import "./components/App.css";
 import Header from "./components/Header";
 import MessageBoardLanding from "./components/MessageBoardLanding"; // Adjust the path as needed
+import SectionPage from "./components/SectionPage"; // Import the new component
 
 function App() {
   const [user, setUser] = useState(null);
@@ -45,8 +46,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
-              path="/login"
-              element={user ? <Navigate to="/dashboard" /> : <Login />}
+              path="/login" element={user ? <Navigate to="/dashboard" /> : <Login />}
             />
             <Route path="/create-account" element={<CreateAccount />} />
             <Route
@@ -58,7 +58,8 @@ function App() {
               element={user ? <UserSettings /> : <Navigate to="/login" />}
             />
             <Route path="/message-board" element={<MessageBoardLanding />} />{" "}
-            {/* Add this route */}
+            <Route path="/message-board/section/:sectionId" element={<SectionPage />} /> {/* New route */}
+          
           </Routes>
         </div>
         <Footer />
