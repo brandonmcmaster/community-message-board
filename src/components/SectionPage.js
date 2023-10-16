@@ -1,34 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { fetchSectionById, fetchThreadsBySection } from '../firestoreUtils';
-import CreatePost from './CreatePost';
-import ThreadPreview from './ThreadPreview';
+import { useParams } from 'react-router-dom';
+import { fetchThreadsBySection, fetchSectionById } from '../firestoreUtils';  // Import the new functions
+import ThreadList from './ThreadList';
 
-const SectionPage = ({ sectionId }) => {
-  const [section, setSection] = useState(null);
-  const [threads, setThreads] = useState([]);
+const SectionPage = () => {
+  const { sectionId } = useParams();  // Retrieve sectionId from route parameters
+  const [sectionDetails, setSectionDetails] = useState(null);
+  const [threads, setThreads] = useState([]);  // Initialize threads state
+
+  const refreshThreads = () => {
+    fetchThreadsBySection(sectionId).then(newThreads => setThreads(newThreads));
+  };
 
   useEffect(() => {
-    // Fetch section details by ID and set in state
-    fetchSectionById(sectionId).then(details => setSection(details));
+    fetchSectionById(sectionId).then(details => {
+      console.log('Section Details:', details);
+      setSectionDetails(details);
+    });
+    refreshThreads();  // Refresh the threads when the component mounts
+  }, [sectionId, refreshThreads]);
 
-    // Fetch threads related to this section and set in state
-    fetchThreadsBySection(sectionId).then(fetchedThreads => setThreads(fetchedThreads));
-  }, [sectionId]);
+  console.log('Threads:', threads);
 
   return (
-    <div>
-      {section && (
-        <div>
-          <h1>{section.name}</h1>
-          <p>{section.description}</p>
-        </div>
-      )}
-      
-      <CreatePost sectionId={sectionId} />
-      
-      {threads.map(thread => (
-        <ThreadPreview key={thread.id} thread={thread} />
-      ))}
+    <div className="bg-black text-white min-h-screen">
+      <div className="container mx-auto p-4">
+        <h1 className="text-4xl mb-4">Section: {sectionDetails ? sectionDetails.name : 'Loading...'}</h1>
+        <p>{sectionDetails ? sectionDetails.description : 'Loading description...'}</p>
+
+        {/* Render ThreadList here */}
+        <ThreadList threads={threads} refreshThreads={refreshThreads} />
+      </div>
     </div>
   );
 };

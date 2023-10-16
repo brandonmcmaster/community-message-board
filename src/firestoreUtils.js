@@ -1,6 +1,7 @@
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, addDoc, query, getDocs, where } from "firebase/firestore"; 
 import { auth } from './firebase';
 
+
 // Initialize Firestore
 const db = getFirestore();
 
