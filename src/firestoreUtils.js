@@ -121,6 +121,10 @@ export const fetchCurrentUserRole = async () => {
 
 // Function to fetch threads based on the sectionId from Firestore
 export const fetchThreads = async (sectionId, setThreads) => {
+  if (!sectionId) {
+    console.warn("sectionId is undefined. Skipping fetchThreads.");
+    return;
+  }
   const threadsRef = collection(db, 'threads');
   const q = query(threadsRef, where('sectionId', '==', sectionId));
   const querySnapshot = await getDocs(q);
@@ -136,7 +140,12 @@ export const fetchThreads = async (sectionId, setThreads) => {
   setThreads(threads);
 };
 
+
 export const fetchThreadsBySection = async (sectionId) => {
+  if (!sectionId) {
+    console.warn("sectionId is undefined. Skipping fetchThreads.");
+    return;
+  }
   const threadsRef = collection(db, 'threads');
   const q = query(threadsRef, where('sectionId', '==', sectionId));
   const querySnapshot = await getDocs(q);

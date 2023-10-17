@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchThreadsBySection, fetchSectionById } from '../firestoreUtils';  // Import the new functions
 import ThreadList from './ThreadList';
@@ -8,16 +8,20 @@ const SectionPage = () => {
   const [sectionDetails, setSectionDetails] = useState(null);
   const [threads, setThreads] = useState([]);  // Initialize threads state
 
-  const refreshThreads = () => {
-    fetchThreadsBySection(sectionId).then(newThreads => setThreads(newThreads));
-  };
+  const refreshThreads = useCallback(() => {
+    if (sectionId) {  // Add this conditional check
+      fetchThreadsBySection(sectionId).then(newThreads => setThreads(newThreads));
+    }
+  }, [sectionId]);
 
   useEffect(() => {
-    fetchSectionById(sectionId).then(details => {
-      console.log('Section Details:', details);
-      setSectionDetails(details);
-    });
-    refreshThreads();  // Refresh the threads when the component mounts
+    if (sectionId) {  // Add this conditional check
+      fetchSectionById(sectionId).then(details => {
+        console.log('Section Details:', details);
+        setSectionDetails(details);
+      });
+      refreshThreads();  // Refresh the threads when the component mounts
+    }
   }, [sectionId, refreshThreads]);
 
   console.log('Threads:', threads);
@@ -25,7 +29,7 @@ const SectionPage = () => {
   return (
     <div className="bg-black text-white min-h-screen">
       <div className="container mx-auto p-4">
-        <h1 className="text-4xl mb-4">Section: {sectionDetails ? sectionDetails.name : 'Loading...'}</h1>
+        <h1 className="text-4xl mb-4">{sectionDetails ? sectionDetails.name : 'Loading...'}</h1>
         <p>{sectionDetails ? sectionDetails.description : 'Loading description...'}</p>
 
         {/* Render ThreadList here */}
@@ -36,3 +40,4 @@ const SectionPage = () => {
 };
 
 export default SectionPage;
+
