@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
-import { createNewThread } from '../firestoreUtils';  // Import the function
+import { useParams, useNavigate } from 'react-router-dom';  // Import useNavigate
+import { createNewThread } from '../firestoreUtils';  
+import { auth } from '../firebase'; 
 
-const NewThreadForm = ({ sectionId, refreshThreads }) => {  // Accept sectionId and refreshThreads as props
+const NewThreadForm = () => {  // Note: We removed refreshThreads from props
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const { sectionId } = useParams(); 
+  const userId = auth.currentUser ? auth.currentUser.uid : null; 
+  const navigate = useNavigate();  // Initialize useNavigate
 
-    // Create a new thread in Firestore
-    createNewThread(title, description, sectionId)
-      .then(() => {
-        setTitle('');
-        setDescription('');
-        refreshThreads();  // Refresh the list of threads after creating a new one
-      });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (userId && sectionId) {
+      // Create a new thread in Firestore
+      await createNewThread(title, description, sectionId, userId);
+      // Navigate back to the section page
+      navigate(`/message-board/section/${sectionId}`);
+    } else {
+      // Handle the case where the user is not logged in or sectionId is missing
+      console.error("User is not logged in, cannot create thread.");
+    }
   };
 
   return (
@@ -46,3 +54,4 @@ const NewThreadForm = ({ sectionId, refreshThreads }) => {  // Accept sectionId 
 };
 
 export default NewThreadForm;
+

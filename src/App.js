@@ -17,7 +17,9 @@ import Footer from "./components/Footer";
 import "./components/App.css";
 import Header from "./components/Header";
 import MessageBoardLanding from "./components/MessageBoardLanding"; // Adjust the path as needed
-import SectionPage from "./components/SectionPage"; // Import the new component
+import SectionPage from "./components/SectionPage";
+import NewThreadForm from "./components/NewThreadForm";
+import ThreadPage from "./components/ThreadPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -58,8 +60,10 @@ function App() {
               element={user ? <UserSettings /> : <Navigate to="/login" />}
             />
             <Route path="/message-board" element={<MessageBoardLanding />} />{" "}
-            <Route path="/message-board/section/:sectionId" element={<SectionPage />} /> {/* New route */}
-          
+            <Route path="/message-board/section/:sectionId" element={<SectionPage />} /> 
+            <Route path="/message-board/section/:sectionId/new-thread" element={<NewThreadForm />} />
+            <Route path="/message-board/section/:sectionId/thread/:threadId" element={<ThreadPage />} />
+
           </Routes>
         </div>
         <Footer />

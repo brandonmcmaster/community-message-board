@@ -69,6 +69,21 @@ export const createNewThread = async (title, description, sectionId, userId) => 
   await addDoc(threadRef, newThread);
 };
 
+export const fetchThreadById = async (threadId) => {
+  const threadRef = doc(db, 'threads', threadId);
+  const threadSnap = await getDoc(threadRef);
+
+  if (threadSnap.exists()) {
+    return {
+      id: threadSnap.id,
+      ...threadSnap.data(),
+    };
+  } else {
+    console.error(`Thread with id ${threadId} not found`);
+    return null;
+  }
+};
+
 export const setUserOnline = async (userId, username) => {
   const userRef = doc(db, 'online_users', userId);
   await setDoc(userRef, {
