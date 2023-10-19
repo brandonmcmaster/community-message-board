@@ -27,13 +27,13 @@ const SectionList = ({ sections, refreshSections }) => {  // Added refreshSectio
 
   return (
     <div className="mb-4">
-      <h2 className="text-3xl mb-2">Sections</h2>
       <ul>
         {sections.map((section, index) => (
           <li key={index} className="text-xl mb-1">
             <Link to={`/message-board/section/${section.id}`}> {/* Wrap the section name with Link */}
               {section.name}
             </Link>
+            <li>{section.description}</li>
           </li>
         ))}
       </ul>

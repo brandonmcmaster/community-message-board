@@ -191,3 +191,35 @@ export const fetchSectionById = async (sectionId) => {
     return null;
   }
 };
+
+
+// Function to add a new post to a thread
+export const addPostToThread = async (threadId, content, userId, parentPostId = null) => {
+  const postRef = collection(db, 'posts');
+  const newPost = {
+    threadId,
+    content,
+    postedBy: userId,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    parentPostId
+  };
+  await addDoc(postRef, newPost);
+};
+
+// Function to fetch posts for a specific thread
+export const fetchPostsForThread = async (threadId, setPosts) => {
+  const postsRef = collection(db, 'posts');
+  const q = query(postsRef, where('threadId', '==', threadId));
+  const querySnapshot = await getDocs(q);
+  const posts = [];
+
+  querySnapshot.forEach((doc) => {
+    posts.push({
+      id: doc.id,
+      ...doc.data(),
+    });
+  });
+
+  setPosts(posts);
+};

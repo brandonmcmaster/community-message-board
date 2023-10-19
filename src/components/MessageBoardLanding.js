@@ -18,14 +18,8 @@ const MessageBoardLanding = () => {
     <div className="bg-black text-white min-h-screen">
       <div className="container mx-auto p-4">
         <h1 className="text-4xl mb-4">Welcome to the Message Board</h1>
-        
-        {/* New Components */}
         <SectionList sections={sections} refreshSections={refreshSections} />  {/* Pass refreshSections as a prop */}
-        {/* Render ThreadList based on selected section here */}
-        {/* Render NewThreadForm here */}
-
-        {/* Existing Components */}
-        <PostList />
+        
       </div>
     </div>
   );
