@@ -223,3 +223,24 @@ export const fetchPostsForThread = async (threadId, setPosts) => {
 
   setPosts(posts);
 };
+
+// Function to fetch posts for a specific thread in real-time
+export const listenToPostsForThread = (threadId, setPosts) => {
+  const postsRef = collection(db, 'posts');
+  const q = query(postsRef, where('threadId', '==', threadId));
+  
+  // Real-time listener
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const posts = [];
+    querySnapshot.forEach((doc) => {
+      posts.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+    setPosts(posts);
+  });
+
+  // Return the unsubscribe function to stop listening to changes
+  return unsubscribe;
+};

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPostsForThread } from '../firestoreUtils';  // Make sure to import the function
+import { listenToPostsForThread } from '../firestoreUtils';  // Make sure to import the function
 
 const ThreadPosts = ({ threadId }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    // Fetch posts for the specific thread from Firestore and set them in state
-    fetchPostsForThread(threadId, setPosts);
+    // Listen to real-time updates
+    const unsubscribe = listenToPostsForThread(threadId, setPosts);
+    
+    // Unsubscribe from real-time updates when the component unmounts
+    return () => unsubscribe();
   }, [threadId]);
 
   return (
