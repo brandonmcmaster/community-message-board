@@ -244,3 +244,19 @@ export const listenToPostsForThread = (threadId, setPosts) => {
   // Return the unsubscribe function to stop listening to changes
   return unsubscribe;
 };
+
+// Function to fetch user details by user ID
+export const fetchUserById = async (userId) => {
+  const userRef = doc(db, 'users', userId);
+  const userSnap = await getDoc(userRef);
+  
+  if (userSnap.exists()) {
+    return {
+      id: userSnap.id,
+      ...userSnap.data(),
+    };
+  } else {
+    console.error(`User with ID ${userId} not found.`);
+    return null;
+  }
+};
