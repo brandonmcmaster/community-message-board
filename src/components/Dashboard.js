@@ -2,29 +2,32 @@ import React, { useEffect, useState } from "react";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
 import { updateProfile } from "firebase/auth"; 
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase';
+
+
 
 const Dashboard = () => {
   const [displayName, setDisplayName] = useState("");
   const [newDisplayName, setNewDisplayName] = useState("");
   const [photoURL, setPhotoURL] = useState("");
   const [newPhotoURL, setNewPhotoURL] = useState("");
-  const [avatarFile, setAvatarFile] = useState(null);
   const user = auth.currentUser;
   
-
+  
   useEffect(() => {
     const fetchUserData = async () => {
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (userDoc.exists()) {
         setDisplayName(userDoc.data().displayName);
         setPhotoURL(userDoc.data().photoURL);
+        setUsername(userDoc.data().username);  // set the username
       }
     };
     fetchUserData();
   }, [user.uid]);
-
+  const [username, setUsername] = useState("");
+  
   const handleAvatarUpload = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -33,7 +36,7 @@ const Dashboard = () => {
     }
     const storageRef = ref(storage, `avatars/${user.uid}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
-  
+    
     uploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -47,7 +50,7 @@ const Dashboard = () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
           console.log('File available at', downloadURL);
           setNewPhotoURL(downloadURL);
-  
+          
           // Update user auth profile
           try {
             await user.updateProfile({
@@ -128,11 +131,12 @@ const Dashboard = () => {
     <div className="bg-black text-white p-6">
       <div className="flex flex-col items-center">
         <img 
-          src={photoURL || 'default-avatar.jpg'} 
+          src={photoURL || 'https://m.media-amazon.com/images/I/41bzx00f+NL._AC_.jpg' } 
           alt="User Avatar" 
           className="rounded-full w-32 h-32 object-cover mb-4" 
         />
-        <h2 className="text-2xl font-semibold mb-4">{displayName || 'Anonymous User'}</h2>
+       <h2 className="text-2xl font-semibold mb-4">{displayName || username || 'Please choose a username'}</h2>
+
       </div>
       <div className="border border-gray-700 p-6 rounded">
         <h3 className="text-xl font-semibold mb-4">Update Profile</h3>

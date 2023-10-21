@@ -5,18 +5,24 @@ import { auth } from './firebase';
 // Initialize Firestore
 const db = getFirestore();
 
-export const addUserToFirestore = async (uid, displayName, photoURL) => {
-  const userRef = doc(db, 'users', uid);
-  const userSnap = await getDoc(userRef);
+// Function to add a new user to Firestore
+export const addUserToFirestore = async (user, photoURL) => {
+  const usersRef = doc(db, 'users', user.uid);
+  const docSnap = await getDoc(usersRef);
 
-  if (!userSnap.exists()) {
-    const data = {
-      displayName,
-      photoURL,
+  // Check if the user already exists in Firestore
+  if (!docSnap.exists()) {
+    // Generate a random display name for first-time users
+    const randomDisplayName = `User${Math.floor(Math.random() * 10000)}`;
+
+    // Create a new user in Firestore
+    await setDoc(usersRef, {
+      userId: user.uid,
+      displayName: randomDisplayName,
       role: 'user',
-      isPremium: false,
-    };
-    await setDoc(userRef, data);
+      photoURL
+      // Add any other default fields you want
+    }, { merge: true});
   }
 };
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { addSection, fetchCurrentUserRole } from '../firestoreUtils';
 import { Link } from 'react-router-dom';
 
-const SectionList = ({ sections, refreshSections }) => {  // Added refreshSections prop
+const SectionList = ({ sections, refreshSections }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [newSectionTitle, setNewSectionTitle] = useState('');
   const [newSectionDescription, setNewSectionDescription] = useState('');
@@ -21,7 +21,7 @@ const SectionList = ({ sections, refreshSections }) => {  // Added refreshSectio
       .then(() => {
         setNewSectionTitle('');
         setNewSectionDescription('');
-        refreshSections();  // Call refreshSections after successfully adding a new section
+        refreshSections();
       });
   };
 
@@ -29,11 +29,11 @@ const SectionList = ({ sections, refreshSections }) => {  // Added refreshSectio
     <div className="mb-4">
       <ul>
         {sections.map((section, index) => (
-          <li key={index} className="text-xl mb-1">
-            <Link to={`/message-board/section/${section.id}`}> {/* Wrap the section name with Link */}
+          <li key={index} className="bg-gray-800 p-4 rounded-lg mb-4">
+            <Link to={`/message-board/section/${section.id}`} className="text-2xl font-bold text-white">
               {section.name}
             </Link>
-            <li>{section.description}</li>
+            <p className="text-base text-gray-400">{section.description}</p>
           </li>
         ))}
       </ul>

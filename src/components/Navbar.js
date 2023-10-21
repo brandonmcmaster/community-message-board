@@ -45,11 +45,6 @@ const Navbar = () => {
         <div>
           {user ? (
             <>
-              <img
-                src={user.photoURL}
-                alt={user.displayName}
-                className="rounded-full w-10 h-10 mr-4"
-              />
               <Link to="/" className="mr-4 text-white">
                 Home
               </Link>
@@ -62,6 +57,11 @@ const Navbar = () => {
               <button onClick={handleSignout} className="text-white mr-4">
                 Sign out
               </button>
+              <img
+                src={user.photoURL}
+                alt={user.displayName}
+                className="rounded-full w-10 h-10 mr-4"
+              />
               <span className="ml-4">Online Users: {onlineUsers}</span>
             </>
           ) : (
