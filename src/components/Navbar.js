@@ -54,15 +54,14 @@ const Navbar = () => {
               <Link to="/message-board" className="mr-4 text-white">
                 Message Board
               </Link>
-              <button onClick={handleSignout} className="text-white mr-4">
-                Sign out
-              </button>
               <img
                 src={user.photoURL}
                 alt={user.displayName}
                 className="rounded-full w-10 h-10 mr-4"
               />
-              <span className="ml-4">Online Users: {onlineUsers}</span>
+              <button onClick={handleSignout} className="text-white mr-4">
+                Sign out
+              </button>
             </>
           ) : (
             <Link to="/login" className="text-white">
